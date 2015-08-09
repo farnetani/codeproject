@@ -8,15 +8,21 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    private $repository;
+    public function __construct(ClientRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index(ClientRepository $repository)
+    public function index()
     {
         //return \CodeProject\Client::all();
-        return $repository->all();
+        return $this->repository->all();
     }
 
     /**
@@ -37,7 +43,9 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        return Client::create($request->all());
+        //return Client::create($request->all());
+        //dd($request->all());
+        return $this->repository->create($request->all());
     }
 
     /**
@@ -48,7 +56,8 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        return Client::find($id);
+        //return Client::find($id);
+        return $this->repository->find($id);
     }
 
     /**
@@ -82,6 +91,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        Client::find($id)->delete();
+        //Client::find($id)->delete();
+        $this->repository->find($id)->delete();
     }
 }
