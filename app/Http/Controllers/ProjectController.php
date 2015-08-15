@@ -6,6 +6,7 @@ use CodeProject\Http\Requests;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Services\ProjectService;
 use Illuminate\Http\Request;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class ProjectController extends Controller
 {
@@ -56,6 +57,12 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        //Esse Authorizer::getResourceOwnerId() captura o ID do usuário (façade do OAuth2)
+        $userId = Authorizer::getResourceOwnerId();
+
+        if ($this->repository->isOwner($id, $userId) == false) {
+           return ['success'=>false];
+        }
         return $this->repository->find($id);
     }
 
@@ -92,4 +99,15 @@ class ProjectController extends Controller
     {
         return $this->service->update($request->all(), $id);
     }
+
+    private function checkProjectOwner($projectId)
+    {
+        $userId = Authorizer::getResourceOwnerId();
+        $projectId = $request->project;
+
+        if ($this->repository->isOwner($projectId, $userId) == false) {
+            return ['error' => 'Access forbidden'];
+        }
+    }
+
 }

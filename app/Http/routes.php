@@ -22,19 +22,17 @@ Route::post('oauth/access_token', function() {
 //Exigindo autenticação para acessar as rotas abaixo
 Route::group(['middleware'=>'oauth'], function() {
 
-	//Simplifica as coisas, pois ele já irá pegar os métodos padrões sem precisar declarar, exceto os create, edit
+	//Simplifica as coisas, pois ele já irá pegar os métodos padrões
+	// sem precisar declarar, exceto os create, edit
 	Route::resource('client','ClientController',['except'=>['create','edit']]);
+	Route::resource('project','ProjectController',['except'=>['create','edit']]);
 
-	//somente a declaração acima já elimina tudo abaixo aqui
-//	Route::get('client', ['middleware'=>'oauth', 'uses'=>'ClientController@index']);
-//	Route::post('client', 'ClientController@store');
-//	Route::get('client/{id}', 'ClientController@show');
-//	Route::put('client/{id}', 'ClientController@update');
-//	Route::delete('client/{id}', 'ClientController@destroy');
+	//Middleware
+	Route::group(['middleware' => 'CheckProjectOwner'], function() {
+		Route::resource('project', 'ProjectController', ['except'=>['create', 'edit']]);
+	});
 
 	Route::group(['prefix'=>'project'], function() {
-		Route::resource('','ProjectController',['except'=>['create','edit']]);
-		Route::resource('','ProjectController',['except'=>['create','edit']]);
 
 		Route::get('{id}/note', 'ProjectNoteController@index');
 		Route::post('{id}/note', 'ProjectNoteController@store');
@@ -42,6 +40,14 @@ Route::group(['middleware'=>'oauth'], function() {
 		Route::put('{id}/note/{noteId}', 'ProjectNoteController@update');
 		Route::delete('{id}/note/{noteId}', 'ProjectNoteController@delete');
 	});
+});
+	//somente a declaração acima já elimina tudo abaixo aqui
+//	Route::get('client', ['middleware'=>'oauth', 'uses'=>'ClientController@index']);
+//	Route::post('client', 'ClientController@store');
+//	Route::get('client/{id}', 'ClientController@show');
+//	Route::put('client/{id}', 'ClientController@update');
+//	Route::delete('client/{id}', 'ClientController@destroy');
+
 //	Route::get('project/{id}/note', 'ProjectNoteController@index');
 //	Route::post('project/{id}/note', 'ProjectNoteController@store');
 //	Route::get('project/{id}/note/{noteId}', 'ProjectNoteController@show');
@@ -53,8 +59,6 @@ Route::group(['middleware'=>'oauth'], function() {
 //	Route::get('project/{id}', 'ProjectController@show');
 //	Route::put('project/{id}', 'ProjectController@update');
 //	Route::delete('project/{id}', 'ProjectController@destroy');
-});
-
 
 //Route::get('client', 'ClientController@index');
 
