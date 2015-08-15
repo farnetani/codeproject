@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ClientTableSeeder::class);
         $this->call(ProjectTableSeeder::class);
         $this->call(ProjectNoteTableSeeder::class);
+        $this->call(OauthClientsTableSeeder::class);
         Model::reguard();
     }
 }

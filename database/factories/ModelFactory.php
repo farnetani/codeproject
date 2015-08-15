@@ -50,3 +50,11 @@ $factory->define(CodeProject\Entities\ProjectNote::class, function (Faker\Genera
         'note' => $faker->paragraph()
     ];
 });
+
+$factory->define(CodeProject\Entities\OauthClients::class, function (Faker\Generator $faker) {
+    return [
+        'id' => 'appid1',
+        'secret' => 'secret',
+        'name' => 'AngularAPP'
+    ];
+});
