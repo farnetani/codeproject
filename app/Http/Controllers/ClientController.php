@@ -47,8 +47,6 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //return Client::create($request->all());
-        //dd($request->all());
         return $this->service->create($request->all());
     }
 
@@ -60,7 +58,6 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        //return Client::find($id);
         return $this->repository->find($id);
     }
 
