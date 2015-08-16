@@ -21,4 +21,9 @@ class Project extends Model
 		return $this->hasMany(projectNote::class);
 	}
 
+	public function members()
+	{
+		return $this->belongsToMany(User::class, 'project_members', 'project_id', 'member_id');
+	}
+
 }
